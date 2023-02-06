@@ -34,7 +34,19 @@ https://your_domain
 
 
 
+## Renew ssl
 
+*Change to the ~/wordpress project directory*
 
+`vi ssl_renew.sh`
 
+*Make it executable with the following command*
+
+`chmod +x ssl_renew.sh`
+
+*Open your root crontab file to run the renewal script at a specified interval*
+
+`sudo crontab -e`
+
+`0 12 * * * /home/admin/wordpress/ssl_renew.sh >> /var/log/cron.log 2>&1`
 
