@@ -30,6 +30,8 @@
 
 https://your_domain
 
+![Alt text](https://github.com/dearvn/deploy-wp-2023/raw/main/setup.png?raw=true "Setup")
+
 
 
 
