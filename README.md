@@ -4,7 +4,8 @@
 
 `cd wordpress`
 
-*Search and change your_domain to domain in file:*
+# STEP 1 => deploy on http://
+*Search and change your_domain to your domain in file*
 
 `vi nginx-conf/nginx.conf`
 
@@ -25,6 +26,41 @@
 *Check that your certificates have been mounted to the webserver*
 
 `docker-compose exec webserver ls -la /etc/letsencrypt/live`
+
+**if step 1 is ok then move to step 2 https**
+
+# STEP 2 => deploy on https://
+
+`vi docker-compose.yml`
+
+*Find the section of the file with the certbot service definition, and replace the --staging flag in the command option with the --force-renewal flag*
+
+`docker-compose up --force-recreate --no-deps certbot`
+
+`docker-compose stop webserver`
+
+`curl -sSLo nginx-conf/options-ssl-nginx.conf https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf`
+
+`cp ssl-nginx-conf/ssl-nginx.conf nginx-conf/nginx.conf`
+
+*One time, search and change your_domain to your domain in nginx.conf file*
+
+`vi docker-compose.yml`
+
+*In the webserver service definition, add the following port mapping below line: - "80:80"*
+
+`- "80:80"`
+`- "443:443"`
+
+*Then, recreate the webserver service*
+
+`docker-compose up -d --force-recreate --no-deps webserver`
+
+*Check your services with docker-compose ps*
+
+`docker-compose ps`
+
+*You will also include the --no-deps option to tell Compose that it can skip starting the webserver service, since it is already running*
 
 *Finish the installation through the WordPress web interface*
 
